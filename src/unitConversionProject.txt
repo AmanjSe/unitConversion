@@ -1,0 +1,1032 @@
+import javax.swing.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Scanner;
+public class unitConversion {
+    final static short KM_range = 1000;
+    final static short grams_range = 1000;
+    final static short CM_range = 100;
+    final static byte seconds = 60;
+    final static short secondsSquare = 3600;
+    final static float pounds = 2.205f;
+    final static byte start = 0;
+    final static double Km_to_Mile = 1.609344;
+    final static double M_to_Mile = 1609.344;
+    final static double Cm_to_Mile = 160934.4;
+    final static double J_to_kJ = 1000;
+    final static double calorie_to_kiloCalorie = 1000;
+    final static double joule_to_calorie = 4.184;
+    final static double calorie_to_joule = 0.239006;
+    final static double joule_to_kiloCalorie = 4184;
+    final static double ton_to_kilogram = 907.18474;
+    final static double year_to_hour = 8766;
+    final static double hour_to_year = 0.00011408;
+    final static double year_to_minute = 525949.2;
+    final static double minute_to_year = 1.9013E-6;
+    final static double year_to_second = 31556952;
+    static ArrayList<String> history = new ArrayList<String>();
+    static ArrayList<String> LoginHistory = new ArrayList<String>();
+    static double value = 0;
+    static int Option;
+    static byte option;
+    static byte choice;
+    static String name;
+    static String Password;
+    static String result;
+    static Scanner sc = new Scanner(System.in);
+    static FileWriter pen;
+    static FileWriter pen1;
+    private static void file() {
+        try {
+            File file = new File("history.txt");
+            if(file.createNewFile()){
+                JOptionPane.showMessageDialog(null, "the file has been created sucessfully!",
+                        "File creation", JOptionPane.INFORMATION_MESSAGE);
+            }
+            File file1 = new File("LoginHistory.txt");
+            if(file1.createNewFile()){
+                JOptionPane.showMessageDialog(null, "the file has been created successfully!",
+                        "File creation", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }catch (IOException e){
+            JOptionPane.showMessageDialog(null, "the file already exists! ");
+        }
+    }
+    private static void fileWriting(){
+        try {
+            pen = new FileWriter("history.txt", true);
+            if(result != null){ // checks if result value was not null
+                history.add(result); // this add result to the array list
+                pen.write(result + "\n"); // this file method adds result to the file
+                // this for conversion history
+            }
+            pen.close(); // this line is mandatory ( is like to put down the pen )
+            pen1 = new FileWriter("LoginHistory.txt", true);
+            pen1.write("\nName: "+ name + "\nPassword:  " +Password);
+            pen1.close();
+            // this for Login history
+        }catch (IOException e){
+            JOptionPane.showMessageDialog(null, "Try again!");
+        }
+    }
+    private static void fileHandling(){
+        file();
+        fileWriting();
+    }
+    private static void loginSystem(Scanner sc){
+        getUserName(sc);
+        System.out.println();
+        getPassword(sc);
+    }
+    private static void getUserName(Scanner sc){
+        while (true){
+            name = JOptionPane.showInputDialog(null, "Name: ");
+            if(name != null) {// this also checks whether if it does not null
+                if(name.equalsIgnoreCase("")){ // this checks for if name field was empty or blank
+                    JOptionPane.showMessageDialog(null, "Name field cannot be empty! ~ Try again",
+                            "name validation", JOptionPane.WARNING_MESSAGE);
+                }else if (name.matches("\\d+")) { // this checks name variable if it was just digits not characters also
+                    JOptionPane.showMessageDialog(null, "Name field cannot be digits! ~ Try again",
+                            "name validation", JOptionPane.WARNING_MESSAGE);
+                }else{
+                    break;
+                }
+            }else{
+                int cancelQuestion = JOptionPane.showConfirmDialog(null, "Do you want to exit ?");
+                if( cancelQuestion == JOptionPane.YES_OPTION ) {
+                    JOptionPane.showMessageDialog(null, "Exiting...", "Operation cancellation",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    try{
+                        Thread.sleep(2500);
+                    }catch (InterruptedException ee){
+                        ee.printStackTrace();
+                    }
+                    JOptionPane.showMessageDialog(null, "Done!");
+                    System.exit(0);// this will terminate the program
+                }
+            }
+        }
+    }
+    private static void getPassword(Scanner sc){
+        while (true){
+            Password = JOptionPane.showInputDialog(null,"Password: ");
+            if(Password == null){
+                int cancelQuestion = JOptionPane.showConfirmDialog(null, "Do you want to exit? ");
+                if( cancelQuestion == JOptionPane.YES_OPTION ){
+                    JOptionPane.showMessageDialog(null, "Exiting...",
+                            "Exiting Program", JOptionPane.INFORMATION_MESSAGE);
+                    try{
+                        Thread.sleep(2500);
+                    }catch (InterruptedException e){
+                        e.printStackTrace();
+                    }
+                    JOptionPane.showMessageDialog(null, "Done!");
+                    System.exit(0);
+                }
+            }else {
+                if(Password.matches("\\d+")){
+                    JOptionPane.showMessageDialog(null, "Password must contain digits & characters",
+                            "Password validation", JOptionPane.ERROR_MESSAGE);
+                } else if(Password.equalsIgnoreCase("")){
+                    JOptionPane.showMessageDialog(null, "Password field should be filled",
+                            "Password validation", JOptionPane.ERROR_MESSAGE);
+                }else if (Password.length() < 7){ // checks its length that should be 7 or greater than 7
+                    JOptionPane.showMessageDialog(null, "Password length should not be less than 7!",
+                            "Password validation", JOptionPane.ERROR_MESSAGE);
+                }else{
+                    JOptionPane.showMessageDialog(null, "name: " + name + "\nPassword: " + Password +
+                            "\nWelcome dear " + name, "Welcome message", JOptionPane.PLAIN_MESSAGE);
+                    System.out.println("name: " + name);
+                    System.out.println("Password: " + Password); // both lines displays name and password in the console
+                    LoginHistory.add("\n "+ name + " \n " + Password); // this adds both ( name and password ) to the array list
+                    JOptionPane.showMessageDialog(null, "Login history stored successfully!",
+                            "Storing Login history", JOptionPane.INFORMATION_MESSAGE);
+                    System.out.println("Access granted successfully");
+                    System.out.println("Welcome dear " + name);
+                    fileHandling();
+                    break;
+                }
+            }
+        }
+    }
+    private static byte getValidOption(Scanner sc){
+        while (true){
+            System.out.print("Choose an option: ");
+            if(!sc.hasNextByte()){ // this checks if the option was not a valid option means it didn't digits .
+                JOptionPane.showMessageDialog(null, "invalid Option! ~ Try again", "Option validation", JOptionPane.ERROR_MESSAGE);
+                sc.next(); // this will clear the invalid value
+            }else{
+                choice = sc.nextByte();
+                break;
+            }
+        }
+        return choice;
+    }
+    private static double getValidValue(Scanner sc){
+        String gettingValue = "Enter a value : ";
+        while (true){
+            System.out.print(gettingValue);
+            while (!sc.hasNextDouble()){ // this also checks for whether the value as a number or not
+                JOptionPane.showMessageDialog(null, "invalid value! ~ Try again", "value validation", JOptionPane.ERROR_MESSAGE);
+                sc.next();
+                System.out.print(gettingValue);
+            }
+            value = sc.nextDouble();
+            if(value < start || value == start){ // then validates 0 and negative values
+                JOptionPane.showMessageDialog(null, "invalid value! ~ Try again", "value validation", JOptionPane.ERROR_MESSAGE);
+            }else{
+                break;
+            }
+        }
+        return value;
+    }
+    private static void displayHistory(){
+        if (!history.isEmpty()){
+            String Q1[] = {"1. All stored history", "2. Previous conversion history"}; // the menu stored in an array
+            while (true){
+                for(String opt : Q1){
+                    System.out.println(opt);
+                } // looped over the array to print the values
+                while (!sc.hasNextByte()){
+                    JOptionPane.showMessageDialog(null, "Invalid option! ~ Try again",
+                            "Option validation", JOptionPane.ERROR_MESSAGE);
+                    sc.next();
+                    for(String opt : Q1){
+                        System.out.println(opt);
+                    }
+                }
+                byte choice = sc.nextByte();
+                if(choice <= start || choice > 2){
+                    JOptionPane.showMessageDialog(null, "Invalid option! ~ Try again",
+                            "Option validation", JOptionPane.ERROR_MESSAGE);
+                    continue;
+                }
+                if(choice == 1){ // this if user chose option 1 :
+                    try{
+                        File file = new File("history.txt");
+                        Scanner scanner = new Scanner(file); // scanner read the file
+                        while (scanner.hasNextLine()){ // this loop continues as long as there were another line to read in the file
+                            // hasNextLine() : checks if there is at least one more line of text available.
+                            System.out.println(scanner.nextLine()); // in here we used nextLine() because of the file maybe contains many of lines
+                            // this is why we used it to read line by line then they will be retrieved by scanner
+                        }
+                    }catch (Exception ee){
+                        System.out.println("Error!");
+                    }
+                }else{ // if user does not :
+                    for(String record : history){
+                        System.out.println(record);
+                    }
+                }
+                break;
+            }
+        }else{ // this checks whether the history was empty or not
+            JOptionPane.showMessageDialog(null, "No conversions yet!", "displaying history", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+    private static void displayLoginHistory(){
+        if (!LoginHistory.isEmpty()){
+            String Q2[] = {"1. All stored Log-in history", "2. Previous Log-in history"};
+            while (true){
+                for(String opt : Q2){
+                    System.out.println(opt);
+                }
+                while (!sc.hasNextByte()){
+                    JOptionPane.showMessageDialog(null, "Invalid option! ~ Try again",
+                            "Option validation", JOptionPane.ERROR_MESSAGE);
+                    sc.next();
+                    for(String opt : Q2){
+                        System.out.println(opt);
+                    }
+                }
+                byte choice = sc.nextByte();
+                if(choice <= start || choice > 2 ){
+                    JOptionPane.showMessageDialog(null, "Invalid option! ~ Try again",
+                            "Option validation", JOptionPane.ERROR_MESSAGE);
+                    continue; // if we use sc.next then after the invalid input , when input a valid one it will go to the first of the loop twice
+                }
+                if(choice == 1){
+                    try{
+                        File file = new File("LoginHistory.txt");
+                        Scanner scanner = new Scanner(file);
+                        while(scanner.hasNextLine()){
+                            System.out.println(scanner.nextLine());
+                        }
+
+                    }catch (Exception ee){
+                        System.out.println("Error!");
+                    }
+                }else{
+                    for(String record : LoginHistory){
+                        System.out.println(record);
+                    }
+                }
+                break;
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "No Log-in history yet", "displaying Log-in history", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+    private static void clearHistory(Scanner sc){
+        if(history.isEmpty()){
+            JOptionPane.showMessageDialog(null, "There is no conversions to display", "displaying history", JOptionPane.INFORMATION_MESSAGE);
+        }else{
+            while (true){
+                String clearHistory[] = {"Do you want to clear the conversion history? ", "1. Yes", "2. No"};
+                for(String opt : clearHistory){
+                    System.out.println(opt);
+                }
+                while(!sc.hasNextByte()){ // this checks if the input was not number or digit
+                    JOptionPane.showMessageDialog(null, "invalid input! ~ Try again", "Option validation" ,JOptionPane.ERROR_MESSAGE);
+                    sc.next();
+                    for(String opt : clearHistory){
+                        System.out.println(opt);
+                    }
+                }
+                Option = sc.nextByte();
+                if(Option <= start || Option > 2){
+                    JOptionPane.showMessageDialog(null, "invalid input! ~ Try again", "Option validation", JOptionPane.ERROR_MESSAGE);
+                    continue;
+                }
+                if(Option == 1){
+                    String clearingHistoryRequest[] = {"The whole conversions ?", "1. Yes", "2. No"};
+                    for(String option : clearingHistoryRequest){
+                        System.out.println(option);
+                    }
+                    while (!sc.hasNextByte()){
+                        JOptionPane.showMessageDialog(null, "invalid input! ~ Try again", "Option validation", JOptionPane.ERROR_MESSAGE);
+                        sc.next();
+                        for(String option : clearingHistoryRequest){
+                            System.out.println(option);
+                        }
+                    }
+                    Option = sc.nextByte();
+                    if(Option <= start || Option > 2 ){
+                        JOptionPane.showMessageDialog(null, "Invalid Input! ~ Try again",
+                                "Invalid Option", JOptionPane.ERROR_MESSAGE);
+                        continue;
+                    }
+                    if(Option == 1){
+                        for(String record : history){
+                            System.out.println(record);
+                        } // this will loop over the Array list
+                        System.out.println();
+                        JOptionPane.showMessageDialog(null, "clearing the history...");
+                        history.clear(); // this clears the whole histories in the Array list
+                        JOptionPane.showMessageDialog(null, "History cleared successfully! ");
+                        break;
+                    }else if (Option == 2){ // if user did not choose the whole conversions
+                        JOptionPane.showMessageDialog(null, "which conversions want to clear 0 to "
+                                + (history.size()-1) + " ?", "message" , JOptionPane.QUESTION_MESSAGE);
+                        // above line asks for which index user want to delete
+                        while (!sc.hasNextByte()){
+                            JOptionPane.showMessageDialog(null, "invalid input! ~ Try again", "Option validation", JOptionPane.ERROR_MESSAGE);
+                            sc.next();
+                        }
+                        for(String Record : history){
+                            System.out.println(Record);
+                        }
+                        Option = sc.nextByte();
+                        history.remove(Option); // this clears the specified index.
+                        JOptionPane.showMessageDialog(null, "history has been cleared successfully! ");
+                        break;
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null, "History were not cleared!" , "warning", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        }
+    }
+    private static void showReturnMessage(){
+        JOptionPane.showMessageDialog(null, "Returning to main menu...", "Return message", JOptionPane.INFORMATION_MESSAGE);
+    }
+    private static void clearLoginHistory(Scanner sc){
+        byte OPTION = 0;
+        if(LoginHistory.isEmpty()){
+            JOptionPane.showMessageDialog(null, "No Login history!", "Login history", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else{
+            while (true){
+                String clearLoginHistory[] = {"Want to clear up history? ", "1. Yes", "2. No"};
+                for(String opt : clearLoginHistory){
+                    System.out.println(opt);
+                }
+                while(!sc.hasNextByte()){
+                    JOptionPane.showMessageDialog(null, "Invalid Option! ~ Try again",
+                            "Invalid Option", JOptionPane.ERROR_MESSAGE);
+                    sc.next();
+                    for(String opt : clearLoginHistory){
+                        System.out.println(opt);
+                    }
+                }
+                OPTION = sc.nextByte();
+                if(OPTION <= start || OPTION > 2){
+                    JOptionPane.showMessageDialog(null, "Invalid Option! ~ Try again",
+                            "Invalid Option", JOptionPane.ERROR_MESSAGE);
+                    continue;
+                }
+                if(OPTION == 1){
+                    for(String loginHistory : LoginHistory){
+                        System.out.println(loginHistory);
+                    }
+                    JOptionPane.showMessageDialog(null, "clearing the history....");
+                    System.out.println();
+                    LoginHistory.clear();
+                    JOptionPane.showMessageDialog(null, "The Log-in history cleared Successfully!");
+                    break;
+                }else if(OPTION == 2){
+                    JOptionPane.showMessageDialog(null, "The Log-in history were not cleared " +
+                            "\nReturning to main menu...", "Return message", JOptionPane.INFORMATION_MESSAGE);
+                    break;
+                }
+            }
+        }
+    }
+    private static void continueSameConversion(){
+        String anotherConversionQuestion[] = {"Do another conversion?", "1. Yes", "2. No"};
+        for(String opt : anotherConversionQuestion){
+            System.out.println(opt);
+        }
+        while (true){
+            if(!sc.hasNextByte()){
+                JOptionPane.showMessageDialog(null, "Invalid option! ~ Try again",
+                        "Invalid Option", JOptionPane.ERROR_MESSAGE);
+                sc.next();
+                for(String opt : anotherConversionQuestion){
+                    System.out.println(opt);
+                }
+            }else{
+                Option = sc.nextByte();
+                if(Option <= start || Option > 2){
+                    JOptionPane.showMessageDialog(null, "Invalid option! ~ Try again",
+                            "Invalid Option", JOptionPane.ERROR_MESSAGE);
+                }else
+                    break;
+            }
+        }
+    }
+    // Length : Meters, Kilometers, Centimeters, Miles
+    private static void length(Scanner sc){
+        do{
+            String lengthMenu[] = {"1. Meter -> Kilometer", "2. Kilometer -> Meter", "3. Meter -> Centimeter", "4. Centimeter -> Meter", "5. Mile -> Kilometer",
+                    "6. Kilometer -> MIle", "7. Mile -> Meter", "8. Meter -> Mile", "9. Mile -> Centimeter", "10. Centimeter -> MIle", "11. return to main menu"};
+            // length menu stored in an array
+            for(String opt : lengthMenu){
+                System.out.println(opt);
+            } // this will loop over the array to print it
+            System.out.print("  \" 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 \" : "); // this will assure user to choose option from this range
+            while (!sc.hasNextByte()){
+                JOptionPane.showMessageDialog(null, "invalid input! ~ Try again",
+                        "option validation", JOptionPane.ERROR_MESSAGE);
+                sc.next();
+                System.out.print("  \" 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 \" : ");
+            }
+            option = sc.nextByte();
+            if(option < 1 || option > 11){ // this checks for if chosen option smaller than 1 and greater than 11 means out of the range
+                JOptionPane.showMessageDialog(null, "option must be \" 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 \" !", "Option validation" ,JOptionPane.ERROR_MESSAGE);
+            }
+        }while (option < 1 || option > 11 ); // if we don't put the condition like this so it won't loop over the menu
+        if(option >= 1 && option <= 10){ // if option was inside this range then it will ask for input value
+            value = getValidValue(sc);
+        }
+        lengthCalculation(sc);// we have a method for the length calculations
+        if(option >=1 && option <= 10){
+            while (true){
+                continueSameConversion();
+                if(Option == 1){
+                    length(sc);
+                }else {
+                    showReturnMessage();
+                    break;
+                }
+                return;
+            }
+        }
+    }
+    private static void lengthCalculation(Scanner sc){
+        switch (option){
+            case 1 -> {
+                double meterToKilometer = (value / KM_range); // this is the rule
+                result = value + " M = " + meterToKilometer + " KM";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE ); // the conversion that stored in the static variable result displays by JOption
+                System.out.println(result); // this also displays in console
+                fileHandling(); // the result will be stored in file
+            }
+            case 2 -> {
+                double kilometerToMeter = (value * KM_range);
+                result = value + " KM = " + kilometerToMeter + " M";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE );
+                System.out.println(result);
+                fileHandling();
+            }
+            case 3 ->{
+                double meterToCentimeter = (value * CM_range);
+                result = value + " M = " + meterToCentimeter + " CM";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(result);
+                fileHandling();
+            }
+            case 4 -> {
+                double centimeterToMeter = (value / CM_range);
+                result = value + " CM = " + centimeterToMeter + " M";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(result);
+                fileHandling();
+            }
+            case 5 -> {
+                double mileToKilometer = (value * Km_to_Mile);
+                result = value + " MI = " + mileToKilometer + " KM";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE );
+                System.out.println(result);
+
+            }
+            case 6 -> {
+                double kilometerToMile = (value / Km_to_Mile);
+                result = value + " KM = " + kilometerToMile + " MI";
+                JOptionPane.showMessageDialog(null,result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE  );
+                System.out.println(result);
+                fileHandling();
+            }
+            case 7 -> {
+                double mileToMeter = (value * M_to_Mile);
+                result = value + " MI = " + mileToMeter + " M";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(result);
+                fileHandling();
+            }
+            case 8 -> {
+                double meterToMile = (value / M_to_Mile);
+                result = value + " M = " + meterToMile + " MI";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(result);
+                fileHandling();
+            }
+            case 9 -> {
+                double mileToCentimeter = (value * Cm_to_Mile);
+                result = value + " MI = " + mileToCentimeter + " CM";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(result);
+                fileHandling();
+            }
+            case 10 -> {
+                double centimeterToMile = ( value / Cm_to_Mile);
+                result = value + " CM = " + centimeterToMile + " MI";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(result);
+                fileHandling();
+            }
+            case 11 -> {
+                showReturnMessage();
+            }
+            default -> JOptionPane.showMessageDialog(null, "invalid option", "Option validation", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    // Weight : kilogram, gram, pounds, ton
+    private static void weight(Scanner sc){
+        do{
+            String weightMenu[] = {"1. kilograms -> pounds", "2. pounds -> kilograms", "3. kilogram -> gram", "4. gram -> kilogram",
+                    "5. ton -> kilogram", "6. kilogram -> ton", "7. return to main menu"};
+            for(String opt : weightMenu){
+                System.out.println(opt);
+            }
+            System.out.print(" \" 1, 2, 3, 4, 5, 6, 7 \" : ");
+            while (!sc.hasNextByte()){
+                JOptionPane.showMessageDialog(null, "invalid input! ~ Try again", "Option validation", JOptionPane.ERROR_MESSAGE);
+                sc.next();
+                System.out.print("  \" 1, 2, 3, 4, 5, 6, 7\" : ");
+            }
+            option = sc.nextByte();
+            if(option < 1 || option > 7){
+                JOptionPane.showMessageDialog(null, "option must be \" 1, 2, 3, 4, 5, 6, 7 \" !", "Option validation" ,JOptionPane.ERROR_MESSAGE);
+            }
+        }while (option < 1 || option > 7);
+        if(option >= 1 && option <= 6){
+            value = getValidValue(sc);
+        }
+        weightCalculation(sc);
+        if(option >=1 && option <= 6){
+            while (true){
+                continueSameConversion();
+                if(Option == 1){
+                    weight(sc);
+                }else {
+                    showReturnMessage();
+                    break;
+                }
+                return;
+            }
+        }
+    }
+    private static void weightCalculation(Scanner sc){
+        switch (option){
+            case 1 ->{
+                double kilogramToPound = value * pounds;
+                result = value + " kg = " + kilogramToPound + " LBS";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE );
+                System.out.println(result);
+                fileHandling();
+            }
+            case 2 ->{
+                double poundToKilogram = value / pounds;
+                result = value + " LBS = " + poundToKilogram + " KG";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE );
+                System.out.println(result);
+                fileHandling();
+            }
+            case 3 -> {
+                double kilogramToGram = value * grams_range;
+                result = value + " KG = " + kilogramToGram + " G";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE );
+                System.out.println(result);
+                fileHandling();
+            }
+            case 4 -> {
+                double gramToKilogram = value / grams_range;
+                result = value + " G= " + gramToKilogram + " KG";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE );
+                System.out.println(result);
+                fileHandling();
+            }
+            case 5 -> {
+                double tonToKilogram = ( value * ton_to_kilogram);
+                result = value + " Ton = " + tonToKilogram + " KG";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(result);
+                fileHandling();
+            }
+            case 6 -> {
+                double kilorgamToTon = ( value / ton_to_kilogram);
+                result = value + "KG = " + kilorgamToTon + " Ton";
+                JOptionPane.showMessageDialog(null,result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(result);
+                fileHandling();
+            }
+            case 7 -> {
+                showReturnMessage();
+            }
+            default -> JOptionPane.showMessageDialog(null, "invalid option", "Option validation", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    // Time : Hours, Minutes, Seconds
+    private static void time(Scanner sc){
+        do {
+            String timeMenu[] = {"1. Hour -> Minute", "2. Minute -> Hour", "3. Hour -> Second","4. Second -> Hour","5. Minute -> Second", "6. Second -> Hour",
+                    "7. Year -> Hour","8. Hour -> Year", "9. Year -> Minute", "10. Minute -> Year", "11. Year -> Second", "12. Second -> Year", "13. return to main menu" };
+            for(String opt : timeMenu){
+                System.out.println(opt);
+            }
+            System.out.print(" \" 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 \" : ");
+            while (!sc.hasNextByte()){
+                JOptionPane.showMessageDialog(null, "invalid input! ~ Try again", "Option validation", JOptionPane.ERROR_MESSAGE);
+                sc.next();
+                System.out.println(" \" 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 \" : ");
+            }
+            option = sc.nextByte();
+            if(option < 1 || option > 13){
+                JOptionPane.showMessageDialog(null, "option must be \" 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 \" !", "Option validation" ,JOptionPane.ERROR_MESSAGE);
+            }
+        }while (option < 1 || option > 13);
+        if(option >= 1 && option <= 12){
+            value = getValidValue(sc);
+        }
+        timeCalculation(sc);
+        if(option >=1 && option <= 12){
+            while (true){
+                continueSameConversion();
+                if(Option == 1){
+                    time(sc);
+                }else {
+                    showReturnMessage();
+                    break;
+                }
+                return; // if we do not write return then , after "No" option it won't return to main menu
+            }
+        }
+    }
+    private static void timeCalculation(Scanner sc){
+        switch (option){
+            case 1 -> {
+                double hourToMinute = value * seconds;
+                result = value + " H = " + hourToMinute + " M";
+                JOptionPane.showMessageDialog(null, result);
+                System.out.println(result);
+                JOptionPane.showMessageDialog(null, "the conversion stored to history");
+                fileHandling();
+            }
+            case 2 -> {
+                double minuteToHour = value / seconds;
+                result = value + " M = " + minuteToHour + " H";
+                JOptionPane.showMessageDialog(null, result+ "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE );
+                System.out.println(result);
+                fileHandling();
+            }
+            case 3 -> {
+                double hourToSecond = value * secondsSquare;
+                result = value + " H= " + hourToSecond + " S";
+                JOptionPane.showMessageDialog(null, result+ "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE );
+                System.out.println(result);
+                fileHandling();
+            }
+            case 4 -> {
+                double secondToHour = value / secondsSquare;
+                result = value + " S= " + secondToHour + " H";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE );
+                System.out.println(result);
+                fileHandling();
+            }
+            case 5 -> {
+                double minuteToSecond = value * seconds;
+                result = value + " M= " + minuteToSecond + " S";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE );
+                System.out.println(result);
+                fileHandling();
+            }
+            case 6 -> {
+                double secondToMinute = value / seconds;
+                result = value + " M= " + secondToMinute + " S";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE );
+                System.out.println(result);
+                fileHandling();
+            }
+            case 7 -> {
+                double yearToHour = (value * year_to_hour);
+                result = value + " Y = " + yearToHour + " H";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(result);
+                fileHandling();
+            }
+            case 8 -> {
+                double hourToYear = (value * hour_to_year);
+                result = value + " H = " + hourToYear + " Y";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(result);
+                fileHandling();
+            }
+            case 9 -> {
+                double yeartoMinute = (value * year_to_minute);
+                result = value + " Y = " + yeartoMinute + " MIN";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(result);
+                fileHandling();
+            }
+            case 10 -> {
+                double minuteToYear = ( value * minute_to_year );
+                result = value + " MIN = " + minuteToYear + " Y";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(result);
+                fileHandling();
+            }
+            case 11 -> {
+                double yearToSecond = ( value * year_to_second );
+                result = value + " Y = " + yearToSecond + " Sec";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(result);
+                fileHandling();
+            }
+            case 12 -> {
+                double secondToYear = ( value / year_to_second);
+                result = value + " SEC = " + secondToYear + " Y";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(result);
+                fileHandling();
+            }
+            case 13 -> {
+                JOptionPane.showMessageDialog(null, "returning...");
+            }
+            default -> JOptionPane.showMessageDialog(null, "invalid option", "Option validation", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    // Temperature : Celsius, Fahrenheit, Kelvin
+    private static void temperature(Scanner sc){
+        do {
+            String temperatureMenu[] = {"1. Celsius -> Fahrenheit", "2. Fahrenheit -> Celsius","3. Fahrenheit -> Kelvin","4. Kelvin -> Fahrenheit",
+                    "5. Celsius -> Kelvin", "6. Kelvin -> Celsius", "7. return to main menu"};
+            for(String opt : temperatureMenu){
+                System.out.println(opt);
+            }
+            System.out.print(" \" 1, 2, 3, 4, 5, 6, 7 \" : ");
+            while (!sc.hasNextByte()){
+                JOptionPane.showMessageDialog(null, "invalid input! ~ Try again", "Option validation", JOptionPane.ERROR_MESSAGE);
+                sc.next();
+                System.out.print("\" 1, 2, 3, 4, 5, 6, 7 \": ");
+            }
+            option = sc.nextByte();
+            if(option < 1 || option > 7){
+                JOptionPane.showMessageDialog(null, "option must be \" 1, 2, 3, 4, 5, 6, 7 \" !", "Option validation" ,JOptionPane.ERROR_MESSAGE);
+            }
+        }while (option < 1 || option > 7);
+        if(option >= 1 && option <= 6){ // means just between 1 to 6 , console requests enter value not for view history
+            while(true){ // just for temperature we did not validate 0 and zero because it can be 0 and negative also
+                System.out.print("Enter a value: ");
+                if(!sc.hasNextDouble()){
+                    JOptionPane.showMessageDialog(null, "Please enter a valid number", "value validation", JOptionPane.PLAIN_MESSAGE);
+                    sc.next(); // it will clear invalid input
+                }else{
+                    value = sc.nextDouble();
+                    break;
+                }
+            }
+        }
+        temperatureCalculation(sc);
+        if(option >= 1 && option <= 6){
+            while (true){
+                continueSameConversion();
+                if(Option == 1){
+                    temperature(sc);
+                }else {
+                    showReturnMessage();
+                    break;
+                }
+                return;
+            }
+        }
+    }
+    private static void temperatureCalculation(Scanner sc){
+        switch (option){
+            case 1 ->{
+                double celciusToFahranheit = (value * 9/5) + 32;
+                result = value + " C = " + celciusToFahranheit + " F";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE );
+                System.out.println(result);
+                fileHandling();
+            }
+            case 2 -> {
+                double fahranheitToCelcius = (value - 32) * (5.0/9);
+                result = value + " F = " + fahranheitToCelcius + " C";
+                JOptionPane.showMessageDialog(null,result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE );
+                System.out.println(result);
+                fileHandling();
+            }
+            case 3 -> {
+                double fahranehitToKelvin = (value - 32) * 5/9 + 273.15;
+                result = value + " F = " + fahranehitToKelvin + " K";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE );
+                System.out.println(result);
+                fileHandling();
+            }
+            case 4 ->{
+                double kelvinToFahranheit = ((value - 273.15) * 9/5) + 32;
+                result = value + " K = " + kelvinToFahranheit + " F";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE );
+                System.out.println(result);
+                fileHandling();
+            }
+            case 5 -> {
+                double celciusToKelvin = (value + 273.15);
+                result = value + " C = " + celciusToKelvin + " K";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE );
+                System.out.println(result);
+                fileHandling();
+            }
+            case 6 -> {
+                double kelvinToCelcius = (value - 273.15);
+                result = value + " K = " + kelvinToCelcius + " C";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE );
+                System.out.println(result);
+                fileHandling();
+            }
+            case 7 -> {
+                JOptionPane.showMessageDialog(null, "returning...");
+            }
+            default -> JOptionPane.showMessageDialog(null, "invalid option", "Option validation", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    private static void Energy(Scanner sc){
+        do{
+            String EnergyMenu[] = {"1. Joule -> KiloJoule","2. KiloJoule -> Joule","3. Calorie -> KiloCalorie",
+                    "4. KiloCalorie -> Calorie","5. Joule -> Calorie","6. Calorie -> Joule",
+                    "7. Joule -> KiloCalorie","8. KiloCalorie -> Joule","9. return to main menu"  };
+            for(String opt : EnergyMenu){
+                System.out.println(opt);
+            }
+            System.out.print(" \" 1, 2, 3, 4, 5, 6, 7, 8, 9 \" : ");
+            while(!sc.hasNextByte()){
+                JOptionPane.showMessageDialog(null, "invalid option! ~ Try again",
+                        "Option validation", JOptionPane.ERROR_MESSAGE);
+                sc.next();
+                System.out.print(" \" 1, 2, 3, 4, 5, 6, 7, 8, 9 \" : ");
+            }
+            option = sc.nextByte();
+            if(option < 1 || option > 9){
+                JOptionPane.showMessageDialog(null,"option must be \" 1, 2, 3, 4, 5, 6, 7, 8, 9 \" !", "Option validation" ,JOptionPane.ERROR_MESSAGE );
+            }
+        } while (option < 1 || option > 9);
+        if(option >= 1 && option <= 8){
+            value = getValidValue(sc);
+        }
+        energyCalculation(sc);
+        if(option >=1 && option <= 8){
+            while (true){
+                continueSameConversion();
+                if(Option == 1){
+                    Energy(sc);
+                }else {
+                    showReturnMessage();
+                    break;
+                }
+                return;
+            }
+        }
+    }
+    private static void energyCalculation(Scanner sc){
+        switch (option){
+            case 1 -> {
+                double jouleToKiloJoule = (value / J_to_kJ);
+                result = value + " J = " + jouleToKiloJoule + " KJ";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(result);
+                fileHandling();
+            }
+            case 2 -> {
+                double kilojouleToJoule = ( value * 1000 );
+                result = value + " KJ = " + kilojouleToJoule + " J";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(result);
+                fileHandling();
+            }
+            case 3 -> {
+                double calorieToKiloCalorie = (value / calorie_to_kiloCalorie);
+                result = value + " cal = " + calorieToKiloCalorie + " kcal";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(result);
+                fileHandling();
+            }
+            case 4 -> {
+                double kilocalorieToCalorie = (value * calorie_to_kiloCalorie);
+                result = value + " kcal = " + kilocalorieToCalorie + " cal";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(result);
+                fileHandling();
+            }
+            case 5 -> {
+                double jouleToCalorie = (value * joule_to_calorie);
+                result = value + " J = " + jouleToCalorie + " cal";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(result);
+                fileHandling();
+            }
+            case 6 -> {
+                double calorieToJoule = (value * calorie_to_joule);
+                result = value + " cal = " + calorieToJoule + " J";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully! ",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(result);
+                fileHandling();
+            }
+            case 7 -> {
+                double jouleToKiloCalorie = (value / joule_to_kiloCalorie);
+                result = value + " J = " + jouleToKiloCalorie + " kcal";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully!",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(result);
+                fileHandling();
+            }
+            case 8 -> {
+                double kiloCalorieToJoule = (value * joule_to_kiloCalorie);
+                result = value + " kcal = " + kiloCalorieToJoule + " J";
+                JOptionPane.showMessageDialog(null, result + "\n the conversion stored to history successfully",
+                        "storing conversion history", JOptionPane.INFORMATION_MESSAGE);
+                System.out.println(result);
+                fileHandling();
+            }
+            case 9 -> {
+                JOptionPane.showMessageDialog(null, "Returning...", "Message", JOptionPane.PLAIN_MESSAGE);
+            }
+        }
+    }
+    private static void menuMethod(Scanner sc)  {
+        do {
+            System.out.println("========unit converter menu========");
+            System.out.println("To restart the program \" type 0 \" "); // this for the users who wants to restart the program
+            System.out.println();
+            String[] menu = {"1. length (KM, M, CM, Mile)", "2. Weight (KG, Pounds, G, TONNE)", "3. Time (Year ,H, M, S)","4. Temperature (C, F, K)", "5. Energy(J, KJ, cal, kcal)",
+                    "6. Display conversion history", "7. Display Log-in history","8. Clear Conversion history","9. Clear Log-in history", "10- exit"};
+            for(String menuList : menu){
+                System.out.println(menuList);
+            }
+            choice = getValidOption(sc);
+            switch (choice){
+                case 0 -> JOptionPane.showMessageDialog(null, "restarting...");
+                case 1 -> length(sc); // if chose 1 , length method will be called
+                case 2 -> weight(sc); // if chose 2 , weight method will be called
+                case 3 -> time(sc); // if chose 3 , time method will be called
+                case 4 -> temperature(sc); // if chose 4 , temperature  method will be called
+                case 5 -> Energy(sc);// if chose 5 , energy method will be called
+                case 6 -> displayHistory(); // if chose 6 , conversion history will be displayed
+                case 7 -> displayLoginHistory(); // if chose 7 , Login history will be displayed
+                case 8 -> clearHistory(sc); // if chose 8 , clearHistory method will be run and called
+                case 9 -> clearLoginHistory(sc); // if chose 9 , clearLoginHistory will be run and called
+                case 10 -> {
+                    int Question = JOptionPane.showConfirmDialog(null, "Do you want to quit from the program? ");
+                    if(Question == JOptionPane.YES_OPTION){
+                        JOptionPane.showMessageDialog(null, "Quitting...");
+                        try{
+                            Thread.sleep(1000);
+                        }catch (InterruptedException e){
+                            System.out.println("Error!");
+                        }
+                        JOptionPane.showMessageDialog(null, "Done! ");
+                        System.exit(0);
+                    }else if (Question == JOptionPane.NO_OPTION || Question == JOptionPane.CANCEL_OPTION){
+                        JOptionPane.showMessageDialog(null, "Returning to main menu...",
+                                "Returning message", JOptionPane.INFORMATION_MESSAGE);
+                        menuMethod(sc);
+                        return;
+                    }
+                } // if chose 10, this will terminate the program
+                default -> JOptionPane.showMessageDialog(null, "Try again!", "Option validation", JOptionPane.WARNING_MESSAGE);
+            }
+        }while (choice != 10); // if i write choice == 10 then won't loop over the menu and loop just if user selects 10.
+    }
+    public static void main(String[] args)  {
+        loginSystem(sc); // this method will be called first
+        System.out.println();
+        System.out.println("program last access time: ");
+        Date time = new Date();
+        SimpleDateFormat formatedTime = new SimpleDateFormat("hh:mm:ss");
+        System.out.println(formatedTime.format(time)); // this prints now time
+        menuMethod(sc); // then menu method will be started to run
+    }
+}
